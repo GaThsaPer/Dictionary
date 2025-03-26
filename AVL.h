@@ -6,13 +6,15 @@
 #include <fstream>
 
 namespace DIC{
-    class avl{
+    class node{
     public:
-        avl();
-        ~avl();
+        node();
+        ~node();
     private:
         int key;
         std::vector<std::string> words;
+        int weight;
+        int* parent;
         int* left;
         int* right;
     };
@@ -21,7 +23,8 @@ namespace DIC{
     public:
         Dictionary();
         ~Dictionary();
+        std::vector<std::string> operator[] (const std::string &val);
     private:
-        avl* root;
+        node* root;
     };
 }
