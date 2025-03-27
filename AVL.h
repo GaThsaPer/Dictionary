@@ -9,14 +9,21 @@ namespace DIC{
     class node{
     public:
         node();
+        node(node *_p);
+        node(node *_p, std::string key, std::vector<std::string> val);
         ~node();
+        void Insert(node* node);
     private:
-        int key;
+        std::string key;
         std::vector<std::string> words;
         int weight;
-        int* parent;
-        int* left;
-        int* right;
+        node* parent;
+        node* left;
+        node* right;
+        void Right (node* node);
+        void Left (node* node);
+        void LeftRight (node* node);
+        void RightLeft (node* node);
     };
 
     class Dictionary{
