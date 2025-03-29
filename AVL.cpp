@@ -68,9 +68,10 @@ void DIC::node::Back(node** root, node* node){
         if(temp->weight == -2){
             // std::cout << "DATA\n";
             if(temp->right->key < node->key)
-            Right(root, temp);
+                Right(root, temp);
             else
-            RightLeft(root, temp);
+                RightLeft(root, temp);
+                // std::cout << "TEST\n";
             break;
         }
         else if(temp->weight == 2){
@@ -78,7 +79,6 @@ void DIC::node::Back(node** root, node* node){
                 Left(root, temp);
             else
                 LeftRight(root, temp);
-            // std::cout << "TEST\n";
         }
         if(temp->weight == 0){
             break;
@@ -126,9 +126,61 @@ void DIC::node::Left (node** root, node* node) {
     node->weight -= 2;
 }
 void DIC::node::RightLeft (node** root, node* node) {
+    DIC::node* child = node->right;
+    DIC::node* grandChild = child->left;
+    
+    node->right = grandChild->left;
+    child->left = grandChild->right;
+    
+    if(node->right != nullptr)
+        node->right->parent = node;
+    if(child->left != nullptr)
+        child->left->parent = child; 
 
+    grandChild->left = node;
+    grandChild->right = child;
+
+    grandChild->parent = node->parent;
+    child->parent = grandChild;
+    node->parent = grandChild;
+
+    if(grandChild->parent == nullptr)
+        *root = grandChild;
+    else
+        grandChild->parent->key > grandChild->key? grandChild->parent->left = grandChild: grandChild->parent->right = grandChild;
+    
+    node->weight += 2;
+    child->weight--;
+    grandChild->weight = 0;
 }
-void DIC::node::LeftRight (node** root, node* node) {}
+void DIC::node::LeftRight (node** root, node* node) {
+    DIC::node* child = node->left;
+    DIC::node* grandChild = child->right;
+
+    node->left = grandChild->right;
+    child->right = grandChild->left;
+
+    if(node->left != nullptr)
+        node->left->parent = node;
+    if(child->right != nullptr)
+        child->right->parent = child;
+
+    grandChild->left = child;
+    grandChild->right = node;
+
+    grandChild->parent = node->parent;
+    child->parent = grandChild;
+    node->parent = grandChild;
+
+    if(grandChild->parent == nullptr)
+        *root = grandChild;
+    else
+        grandChild->parent->key > grandChild->key? grandChild->parent->left = grandChild: grandChild->parent->right = grandChild;
+
+    child->weight++;
+    node->weight -= 2;
+    grandChild->weight = 0;
+}
 
 void DIC::node::printBT(const std::string& prefix, const DIC::node* node, bool isLeft)
 {
