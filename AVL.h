@@ -12,18 +12,22 @@ namespace DIC{
         node(node *_p);
         node(node *_p, std::string key, std::vector<std::string> val);
         ~node();
-        void Insert(node* node);
+        void Insert(node** root, node* node);
+        std::vector<std::string> GetVal() {return words;}
+        void printBT();
     private:
+        void printBT(const std::string& prefix, const DIC::node* node, bool isLeft);
         std::string key;
         std::vector<std::string> words;
         int weight;
         node* parent;
         node* left;
         node* right;
-        void Right (node* node);
-        void Left (node* node);
-        void LeftRight (node* node);
-        void RightLeft (node* node);
+        void Back(node** root, node* node);
+        void Right (node** root, node*& node);
+        void Left (node** root, node* node);
+        void LeftRight (node**root, node* node);
+        void RightLeft (node** root, node* node);
     };
 
     class Dictionary{
