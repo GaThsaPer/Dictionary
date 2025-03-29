@@ -1,23 +1,46 @@
 #include "AVL.h"
-
+//Dictionary constructor and destructor
 DIC::Dictionary::Dictionary(){
-    root = new node;
-}
+    std::fstream filePL;
+    std::fstream fileJP;
+    filePL.open("polish.txt", std::ios::in);
+    fileJP.open("japanese.txt", std::ios::in);
 
+    std::string polish, japanese;
+    std::getline(filePL, polish);
+    std::getline(fileJP, japanese);
+    std::vector<std::string> jp;
+    jp.push_back(japanese);
+    root = new node(nullptr, polish, jp);
+    while(std::getline(filePL, polish) && std::getline(fileJP, japanese)){
+        jp.at(0) = japanese;
+        root->Insert(&root, new node(nullptr, polish, jp));
+    }
+    filePL.close();
+    fileJP.close();
+}
 DIC::Dictionary::~Dictionary(){
     delete root;
 }
+//Add new words to dictionary
+void DIC::Dictionary::AddWord(std::string sKey, std::string mean){
+    std::fstream filePL;
+    std::fstream fileJP;
 
-std::vector<std::string> DIC::Dictionary::operator[](const std::string &val){
-    std::vector<std::string> ret;
-    if(val == "kot"){
-        ret.push_back("cat");
-        return ret;
-    }
-    ret.push_back("CHu");
-    return ret;
+    filePL.open("polish.txt", std::ios::app);
+    fileJP.open("japanese.txt", std::ios::app);
+
+    filePL << '\n' << sKey;
+    fileJP << '\n' << mean;
+    std::vector<std::string> tempVec;
+    tempVec.push_back(mean);
+    root->Insert(&root, new DIC::node(nullptr, sKey, tempVec));
+
+    fileJP.close();
+    filePL.close();
 }
 
+//Constructors and Destructors for Tree
 DIC::node::node(): parent(nullptr), left(nullptr), right(nullptr) {}
 DIC::node::node(node *_p): parent(_p), left(nullptr), right(nullptr) {}
 DIC::node::node(node* n, std::string s, std::vector<std::string> v): 
@@ -26,6 +49,7 @@ DIC::node::~node(){
     delete left;
     delete right;
 }
+//Insert function
 void DIC::node::Insert(node** root, node* node){
     DIC::node* temp = this;
     int indexKey = 0;
@@ -87,7 +111,7 @@ void DIC::node::Back(node** root, node* node){
     } while (temp->parent != nullptr);
     
 }
-
+//Rotations for tree
 void DIC::node::Right (node** root, node*& node){
     DIC::node* child = node->right;
     //left and right switch
@@ -181,7 +205,48 @@ void DIC::node::LeftRight (node** root, node* node) {
     node->weight -= 2;
     grandChild->weight = 0;
 }
-
+// Searching tree
+std::vector<std::string> DIC::node::Find(std::string sKey){
+    DIC::node* temp = this;
+    while(temp != nullptr){
+        if(temp->key == sKey)
+            return temp->words;
+        else if(temp->key > sKey)
+            temp = temp->left;
+        else
+            temp = temp->right;
+    }
+    return {};
+}
+DIC::node* DIC::node::FindNode(std::string sKey){
+    DIC::node* temp = this;
+    while(temp != nullptr){
+        if(temp->key == sKey)
+            return temp;
+        else if(temp->key > sKey)
+            temp = temp->left;
+        else
+            temp = temp->right;
+    }
+    return nullptr;
+} 
+//Operator<< for node
+namespace DIC{
+    std::ostream& operator<<(std::ostream& os, node* node){
+        if(node == nullptr){
+            os << "Word isn't in dictionary\n";
+        }
+        else{
+            for(int i=0; i<node->GetVal().size(); i++){
+                os << node->GetKey() << " - " << node->GetVal().at(i);
+                if(i != node->GetKey().size())
+                    os << '\n';
+            }
+        }
+        return os;
+    }
+}
+//Printing Tree
 void DIC::node::printBT(const std::string& prefix, const DIC::node* node, bool isLeft)
 {
     if( node != nullptr )
@@ -198,7 +263,6 @@ void DIC::node::printBT(const std::string& prefix, const DIC::node* node, bool i
         printBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
     }
 }
-
 void DIC::node::printBT()
 {
     printBT("", this, false);    
