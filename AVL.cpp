@@ -24,18 +24,26 @@ DIC::Dictionary::~Dictionary(){
 }
 //Add new words to dictionary
 void DIC::Dictionary::AddWord(std::string sKey, std::string mean){
+    //Open Files
     std::fstream filePL;
     std::fstream fileJP;
-
     filePL.open("polish.txt", std::ios::app);
     fileJP.open("japanese.txt", std::ios::app);
-
-    filePL << '\n' << sKey;
-    fileJP << '\n' << mean;
-    std::vector<std::string> tempVec;
-    tempVec.push_back(mean);
-    root->Insert(&root, new DIC::node(nullptr, sKey, tempVec));
-
+    //Insert to Tree new word
+    bool tempFlag = true;
+    DIC::node* temp = root->FindNode(sKey);
+    for(int i=0; i<temp->GetVal().size(); i++)
+        if(temp->GetVal().at(i) == mean)
+            tempFlag = false;
+    if(temp == nullptr || tempFlag){
+        std::vector<std::string> tempVec;
+        tempVec.push_back(mean);
+        root->Insert(&root, new DIC::node(nullptr, sKey, tempVec));
+        //Save to file
+        filePL << '\n' << sKey;
+        fileJP << '\n' << mean;
+    }
+    //Close files
     fileJP.close();
     filePL.close();
 }
