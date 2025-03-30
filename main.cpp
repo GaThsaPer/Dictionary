@@ -2,9 +2,14 @@
 #include "Menu.h"
 
 int main(){
-    DIC::Dictionary dictionary;
-    // dictionary.ShowTree();
-    dictionary.AddWord("mama", "okaasan");
-    std::cout << dictionary["mama"];
+    const UI::windowSpec spec{
+        .screenSize = {10, 40}
+    };
+
+    UI::Menu menu = UI::Menu();
+    menu.Init(spec);
+    menu.Run();
+    menu.ShutDown();
+
     return 0;
 }
