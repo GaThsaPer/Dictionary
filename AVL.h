@@ -39,6 +39,7 @@ namespace DIC{
         Dictionary();
         ~Dictionary();
         DIC::node* operator[] (const std::string &val) {return root->FindNode(val);}
+        std::vector<std::string> operator[] (const char* val) {return root->Find(std::string(val));}
         void ShowTree(){root->printBT();}
         void AddWord(std::string sKey, std::string mean);
     private:

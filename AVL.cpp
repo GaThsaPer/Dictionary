@@ -54,8 +54,10 @@ DIC::node::node(node *_p): parent(_p), left(nullptr), right(nullptr) {}
 DIC::node::node(node* n, std::string s, std::vector<std::string> v): 
     parent(n), left(nullptr), right(nullptr), key(s), words(v) {}
 DIC::node::~node(){
-    delete left;
-    delete right;
+    if(left != nullptr)
+        delete left;
+    if(right != nullptr)
+        delete right;
 }
 //Insert function
 void DIC::node::Insert(node** root, node* node){
