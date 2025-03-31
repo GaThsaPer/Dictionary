@@ -1,7 +1,23 @@
 #include "Menu.h"
 UI::Menu::~Menu(){
-    // delete [] choices;
-    // choices = nullptr;
+    delete [] choices;
+    choices = nullptr;
+}
+void UI::Menu::LOWER(std::string &str){
+    for(int i =0; i < str.size(); i++){
+        if(str.at(i) < 0x61){
+            str.at(i)+= 32;
+        }
+    }
+}
+bool UI::Menu::corrLett(std::string str){
+    LOWER(str);
+    for(int i=0; i<str.size(); i++){
+        if(str.at(0) < 0x61 || str.at(0) > 0x7a){
+            return false;
+        }
+    }
+    return true;
 }
 
 void UI::Menu::Init(const windowSpec &spec){
@@ -15,6 +31,9 @@ void UI::Menu::Init(const windowSpec &spec){
     //FIND MENU
     findField = new FIELD*[2];
     findForm = new FORM;
+    //ADD MENU
+    addField = new FIELD*[3];
+    addForm = new FORM;
     //NCURSES
     initscr();
     cbreak();
@@ -40,6 +59,16 @@ void UI::Menu::Init(const windowSpec &spec){
     set_field_back(findField[0], A_UNDERLINE);
     field_opts_off(findField[0], O_AUTOSKIP);
     findForm = new_form(findField);
+    //ADD MENU
+    addField[0] = new_field(1, 20, 4, 18, 0, 0);
+    addField[1] = new_field(1, 20, 6, 18, 0, 0);
+    addField[2] = NULL;
+
+    set_field_back(addField[0], A_UNDERLINE);
+    field_opts_off(addField[0], O_AUTOSKIP);
+    set_field_back(addField[1], A_UNDERLINE);
+    field_opts_off(addField[1], O_AUTOSKIP);
+    addForm = new_form(addField);
 }
 
 void UI::Menu::Run(){
@@ -66,6 +95,10 @@ void UI::Menu::Run(){
                     post_menu(m_menu);
                     break;
                 case 1:
+                    unpost_menu(m_menu);
+                    AddMenu(c);
+                    post_menu(m_menu);
+                    break;
                 case 2:
                     break;
                 case 3:
@@ -88,6 +121,10 @@ void UI::Menu::ShutDown(){
     //FIND MENU
     free_form(findForm);
     free_field(findField[0]);
+    //ADD MENU
+    free_form(addForm);
+    free_field(addField[0]);
+    free_field(addField[1]);
 
     endwin();
 }
@@ -133,4 +170,62 @@ void UI::Menu::FindMenu(int c){
         }
     }
     unpost_form(findForm);
+}
+
+void UI::Menu::AddMenu(int c){
+    post_form(addForm);
+    refresh();
+
+    mvprintw(4, 10, "Polish: ");
+    mvprintw(6, 8, "Japanese: ");
+    refresh();
+    int index = 0;
+    std::string str[2];
+    std::vector<std::string> tempVec;
+    move(4, 18);
+    while((c = getch()) != KEY_LEFT){
+        switch(c){
+            case KEY_UP:
+                index != 0?index--:index;
+                form_driver(addForm, REQ_NEXT_FIELD);
+                form_driver(addForm, REQ_END_LINE);
+                break;
+                case KEY_DOWN:
+                index != 1?index++:index;
+                form_driver(addForm, REQ_PREV_FIELD);
+                form_driver(addForm, REQ_END_LINE);
+            break;
+            case KEY_BACKSPACE:
+            case 127:
+                if(!str[index].empty()){
+                    str[index].pop_back();
+                    form_driver(addForm, REQ_DEL_PREV);
+                }
+            break;
+            case '\n':
+                if(!str[0].empty() && !str[1].empty() && (corrLett(str[0]) && corrLett(str[1]))){
+                    form_driver(addForm, REQ_DEL_LINE);
+                    form_driver(addForm, REQ_NEXT_FIELD);
+                    form_driver(addForm, REQ_DEL_LINE);
+                    form_driver(addForm, REQ_NEXT_FIELD);
+                    LOWER(str[0]);
+                    LOWER(str[1]);
+                    mvprintw(10, 10, str[0].c_str());
+                    mvprintw(11, 10, str[1].c_str());
+                    move(4, 18);
+                }
+                break;
+                default:
+                if(str[index].size() < 18){
+                    str[index] += c;
+                    form_driver(addForm, c);
+                }
+                break;
+            }
+        }
+        form_driver(addForm, REQ_DEL_LINE);
+        form_driver(addForm, REQ_NEXT_FIELD);
+        form_driver(addForm, REQ_DEL_LINE);
+        form_driver(addForm, REQ_NEXT_FIELD);
+        unpost_form(addForm);
 }
