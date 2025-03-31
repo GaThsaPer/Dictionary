@@ -10,3 +10,8 @@ watashi
 oneesan
 otoosan
 okaasan
+boku
+anata
+nihon
+otooto
+aka

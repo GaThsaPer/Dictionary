@@ -10,6 +10,5 @@ int main(){
     menu.Init(spec);
     menu.Run();
     menu.ShutDown();
-
     return 0;
 }

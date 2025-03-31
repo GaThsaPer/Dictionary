@@ -32,9 +32,14 @@ void DIC::Dictionary::AddWord(std::string sKey, std::string mean){
     //Insert to Tree new word
     bool tempFlag = true;
     DIC::node* temp = root->FindNode(sKey);
-    for(int i=0; i<temp->GetVal().size(); i++)
-        if(temp->GetVal().at(i) == mean)
-            tempFlag = false;
+    // std::cout << "TEST\n";
+    if(temp != nullptr){
+        for(int i=0; i<temp->GetVal().size(); i++){
+            if(temp->GetVal().at(i) == mean){
+                tempFlag = false;
+            }
+        }
+    }
     if(temp == nullptr || tempFlag){
         std::vector<std::string> tempVec;
         tempVec.push_back(mean);

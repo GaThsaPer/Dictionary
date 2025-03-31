@@ -5,7 +5,7 @@ UI::Menu::~Menu(){
 }
 void UI::Menu::LOWER(std::string &str){
     for(int i =0; i < str.size(); i++){
-        if(str.at(i) < 0x61){
+        if(str.at(i) < 0x61 && str.at(i) != ' '){
             str.at(i)+= 32;
         }
     }
@@ -13,7 +13,7 @@ void UI::Menu::LOWER(std::string &str){
 bool UI::Menu::corrLett(std::string str){
     LOWER(str);
     for(int i=0; i<str.size(); i++){
-        if(str.at(0) < 0x61 || str.at(0) > 0x7a){
+        if((str.at(i) < 0x61 || str.at(i) > 0x7a) && str.at(i) != ' '){
             return false;
         }
     }
@@ -181,7 +181,6 @@ void UI::Menu::AddMenu(int c){
     refresh();
     int index = 0;
     std::string str[2];
-    std::vector<std::string> tempVec;
     move(4, 18);
     while((c = getch()) != KEY_LEFT){
         switch(c){
@@ -210,9 +209,7 @@ void UI::Menu::AddMenu(int c){
                     form_driver(addForm, REQ_NEXT_FIELD);
                     LOWER(str[0]);
                     LOWER(str[1]);
-                    mvprintw(10, 10, str[0].c_str());
-                    mvprintw(11, 10, str[1].c_str());
-                    move(4, 18);
+                    dictionary.AddWord(str[0], str[1]);
                 }
                 break;
                 default:
