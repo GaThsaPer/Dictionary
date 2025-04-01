@@ -4,42 +4,47 @@ functionality (from menu.h and form.h)</br>
 For data managment, the project implement an AVL tree as the primary structur to store and manage a dictionary efficiently.
 ## Technology
 ### AVL Tree
-I'm using AVL Tree to contain all words from database (actualy .txt files). That's because of fast searching and O(logN) computational complexity of that algorithm. Each node 
-contains:
-* one parent pointer,
-* two child pointers (left and right),
-* weigth (contains {-1, 0, 1} values),
-* key - string contains polish word
-* words - a vector of strings (each word can has a few meanings).
-</br></br>The tree has a find method - to find one or more searching words, and Insert method, which allow you to add new words to tree and database(.txt files). If insert will find the
-word which you want to add, will add to vector if isn't already contain that meaning.
+I'm using AVL Tree to store all words from database (which consist of .txt files). The choice of an AVL Tree provide fast searching with computational complexity of O(logN). </br>
+Each node in the tree contains the following:
+* Parent pointer
+* Two child pointers (left and right)
+* Weigth (with values {-1, 0, 1})
+* key - a string storing Polish word
+* words - a vector of strings (each word may have multiple meanings)
+</br></br>
+The tree provides two main operations and several usefull:
+* Find methods - two variants to search words in the dictionary. First one return pointer to node containing the data, secound returns only the vector of strings meanings
+* Insert method - adds new words to both the tree and database(.txt files). If the word already exists, the method add the new meaning to the vector (if it isn't already in the dictionary)
+* operator<< - overloaded function that together with the Dictionary operator[], allows displaying a searched word using simple statement ``` cout << dictionaty[string];```
+* Back, left and the rest method - allow to return from a node to the root while updating the tree structure with rotations if Weigth becomes unbalanced. 
 ### Ncurses library
 ## Instalation
-To open dictionary, you will need a ncurses library:
+1. You need to install ncurses library:
 ```bash
-(MacOS)
+#MacOS
 brew install ncurses
-(Linux)
+#Linux
 sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
-Then, clone repository and navigate to directory:
+2. Clone the repository and navigate to project directory:
 ```bash
 git clone https://github.com/GaThsaPer/Dictionary
 cd Dictionary
 ```
-You can run program by double-click on file Dictionary, or type command: 
+3. Run program </br>
+You can run the program by double-clicking on the Dictionary file or using the command:
 ```bash
 ./Dictionary
 ```
-If it won't run, try to compile project in terminal by command and then run the project:
+4. If the program doesn't run,compile project manually in terminal by command and then execute:
 ```bash
 g++ -std=c++20 -o Dictionary ./*.cpp -lncurses -lmenu -lform
 ```
-If you don't have g++ compiler you need to instal it:
+5. Install g++ compiler if it's not available on your system:
 ```bash
-(macos)
+#macos
 brew install gcc
-(linux)
+#linux
 sudo apt install gcc
 ```
-Project tested on MacBook Pro 2016
+Tested on: MacBook Pro (2016)
