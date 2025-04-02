@@ -2,7 +2,7 @@
 This project involves a terminal-based application for UNIX-based operating systems. It is using ncurses libraryto create a simple text-based user interface exploit the FORM or MENU to 
 functionality (from menu.h and form.h)</br>
 For data managment, the project implement an AVL tree as the primary structur to store and manage a dictionary efficiently.
-## Technology
+## Technology and Functionality
 ### AVL Tree
 I'm using AVL Tree to store all words from database (which consist of .txt files). The choice of an AVL Tree provide fast searching with computational complexity of O(logN). </br>
 Each node in the tree contains the following:
@@ -18,6 +18,11 @@ The tree provides two main operations and several usefull:
 * operator<< - overloaded function that together with the Dictionary operator[], allows displaying a searched word using simple statement ``` cout << dictionaty[string];```
 * Back, left and the rest method - allow to return from a node to the root while updating the tree structure with rotations if Weigth becomes unbalanced. 
 ### Ncurses library
+## Requirements
+1. UNIX-based Operating System
+2. Ncurses library
+3. g++ compiler
+## Usage
 ## Instalation
 1. You need to install ncurses library:
 ```bash
@@ -48,3 +53,6 @@ brew install gcc
 sudo apt install gcc
 ```
 Tested on: MacBook Pro (2016)
+
+## Development and Plans
+## Contact 
