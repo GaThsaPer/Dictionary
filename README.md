@@ -32,13 +32,13 @@ git clone https://github.com/GaThsaPer/Dictionary
 cd Dictionary
 ```
 3. Run program </br>
-You can run the program by double-clicking on the Dictionary file or using the command:
+You can run the program by using the command:
 ```bash
 ./Dictionary
 ```
-4. If the program doesn't run,compile project manually in terminal by command and then execute:
+4. If the program doesn't run, compile project manually in terminal by command and then execute:
 ```bash
-g++ -std=c++20 -o Dictionary ./*.cpp -lncurses -lmenu -lform
+g++ -std=c++20 -o ./build/Dictionary ./src/*.cpp -lncurses -lmenu -lform
 ```
 5. Install g++ compiler if it's not available on your system:
 ```bash

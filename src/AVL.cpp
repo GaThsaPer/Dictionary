@@ -1,10 +1,13 @@
 #include "AVL.h"
 //Dictionary constructor and destructor
 DIC::Dictionary::Dictionary(){
-    std::fstream filePL;
-    std::fstream fileJP;
-    filePL.open("polish.txt", std::ios::in);
-    fileJP.open("japanese.txt", std::ios::in);
+    std::fstream filePL("../db/polish.txt", std::ios::in);
+    std::fstream fileJP("../db/japanese.txt", std::ios::in);
+    if(!filePL.is_open() || !fileJP.is_open()){
+        fileJP.close();
+        filePL.close();        
+        throw std::runtime_error("Can't open files");
+    }
 
     std::string polish, japanese;
     std::getline(filePL, polish);
@@ -27,8 +30,8 @@ void DIC::Dictionary::AddWord(std::string sKey, std::string mean){
     //Open Files
     std::fstream filePL;
     std::fstream fileJP;
-    filePL.open("polish.txt", std::ios::app);
-    fileJP.open("japanese.txt", std::ios::app);
+    filePL.open("../db/polish.txt", std::ios::app);
+    fileJP.open("../db/japanese.txt", std::ios::app);
     //Insert to Tree new word
     bool tempFlag = true;
     DIC::node* temp = root->FindNode(sKey);
@@ -260,25 +263,4 @@ namespace DIC{
         }
         return os;
     }
-}
-//Printing Tree
-void DIC::node::printBT(const std::string& prefix, const DIC::node* node, bool isLeft)
-{
-    if( node != nullptr )
-    {
-        std::cout << prefix;
-
-        std::cout << (isLeft ? "├──" : "└──" );
-
-        // print the value of the node
-        std::cout << node->key << '(' << node->weight << ')' << std::endl;
-
-        // enter the next tree level - left and right branch
-        printBT( prefix + (isLeft ? "│   " : "    "), node->left, true);
-        printBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
-    }
-}
-void DIC::node::printBT()
-{
-    printBT("", this, false);    
 }

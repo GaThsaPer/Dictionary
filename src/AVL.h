@@ -17,10 +17,8 @@ namespace DIC{
         node* FindNode(std::string sKey);
         std::vector<std::string> GetVal() {return words;}
         std::string GetKey() {return key;}
-        void printBT();
         friend std::ostream& operator<<(std::ostream& os, node* node);
     private:
-        void printBT(const std::string& prefix, const DIC::node* node, bool isLeft);
         std::string key;
         std::vector<std::string> words;
         int weight;
@@ -40,7 +38,7 @@ namespace DIC{
         ~Dictionary();
         DIC::node* operator[] (const std::string &val) {return root->FindNode(val);}
         std::vector<std::string> operator[] (const char* val) {return root->Find(std::string(val));}
-        void ShowTree(){root->printBT();}
+        std::vector<std::string> ShowTree();
         void AddWord(std::string sKey, std::string mean);
     private:
         node* root;
