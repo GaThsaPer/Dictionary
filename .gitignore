@@ -1,3 +1,4 @@
 com.txt
 .vscode
+*/.DS_Store
 ./build/Dictionary
