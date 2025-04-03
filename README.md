@@ -1,6 +1,5 @@
 # Dictionary
-This project involves a terminal-based application for UNIX-based operating systems. It is using ncurses libraryto create a simple text-based user interface exploit the FORM or MENU to 
-functionality (from menu.h and form.h)</br>
+This project involves a terminal-based application for UNIX-based operating systems. It is using ncurses libraryto create a simple text-based user interface exploit the FORM or MENU to functionality (from menu.h and form.h)</br>
 For data managment, the project implement an AVL tree as the primary structur to store and manage a dictionary efficiently.
 ## Technology and Functionality
 ### AVL Tree
@@ -18,7 +17,18 @@ The tree provides two main operations and several usefull:
 * operator<< - overloaded function that together with the Dictionary operator[], allows displaying a searched word using simple statement ``` cout << dictionaty[string];```
 * Back, left and the rest method - allow to return from a node to the root while updating the tree structure with rotations if Weigth becomes unbalanced. 
 ### Ncurses library
-[Ncurses](https://en.wikipedia.org/wiki/Ncurses) is a UNIX-based library, for creating textual user interfaces that works in a wild of terminals. 
+[Ncurses](https://en.wikipedia.org/wiki/Ncurses) is a UNIX-based library, for creating textual user interfaces that works in a wild of terminals. I used 2 
+modules from that library: menu.h to compose character-cell terminal menu and form.h to create form screens, which allows users utilize the dictionary.
+My menu class includes the following parameters:
+* Dictionary - The object which contains the AVL Tree and all dictionary.
+* ITEM -
+* MENU -
+* FIELD -
+* FORM -
+* WINDOW -
+* Choices -
+
+</br> You can find decumentation to ncurses [there](https://invisible-island.net/ncurses/man/ncurses.3x.html).
 ## Usage
 Main menu the program has 4 options:
 1. Search - translate polish words into japaneese writnig in their roomaji alphabet (one of their 4 alphabets)
