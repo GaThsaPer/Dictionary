@@ -29,9 +29,7 @@ sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
 4. Create build directory compile project manually in terminal by command and then execute:
 ```bash
-#Linux
 mkdir build
-#Compile
 g++ -std=c++20 -o ./build/Dictionary ./src/*.cpp -lncurses -lmenu -lform
 ```
 5. Run program </br>
@@ -39,7 +37,8 @@ You can run the program by using the following command in build catalogue:
 ```bash
 ./build/Dictionary
 ```
-Tested on: MacBook Pro (2016)
+**Remember to enter /build directory after compiling on both systems otherwise, it won't works**
+Tested on: MacBook Pro (2016), Linux Ubutu Server
 ## Usage
 The program offers four main options:
 1. Search - Translates Polish words into Japaneese using the romaji alphabet (one of four Japanese writing systems).
