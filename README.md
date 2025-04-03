@@ -27,8 +27,11 @@ brew install ncurses
 #Linux
 sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
-4. If the program doesn't run, compile project manually in terminal by command and then execute:
+4. Create build directory compile project manually in terminal by command and then execute:
 ```bash
+#Linux
+mkdir build
+#Compile
 g++ -std=c++20 -o ./build/Dictionary ./src/*.cpp -lncurses -lmenu -lform
 ```
 5. Run program </br>
