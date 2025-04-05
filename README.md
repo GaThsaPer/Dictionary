@@ -57,6 +57,33 @@ The program offers four main options:
 ## Technology and Functionality
 ### AVL Tree
 I'm using AVL Tree to store all words from database (which consist of .txt files). The choice of an AVL Tree provide fast searching with computational complexity of O(logN). </br>
+```c++
+class node{
+    public:
+        node();
+        node(node *_p);
+        node(node *_p, std::string key, std::vector<std::string> val);
+        ~node();
+        void Insert(node** root, node* node);
+        std::vector<std::string> Find(std::string sKey);
+        node* FindNode(std::string sKey);
+        std::vector<std::string> GetVal() {return words;}
+        std::string GetKey() {return key;}
+        friend std::ostream& operator<<(std::ostream& os, node* node);
+    private:
+        std::string key;
+        std::vector<std::string> words;
+        int weight;
+        node* parent;
+        node* left;
+        node* right;
+        void Back(node** root, node* node);
+        void Right (node** root, node*& node);
+        void Left (node** root, node* node);
+        void LeftRight (node**root, node* node);
+        void RightLeft (node** root, node* node);
+    };
+```
 Each node in the tree contains the following:
 * Parent pointer
 * Two child pointers (left and right)
@@ -64,7 +91,7 @@ Each node in the tree contains the following:
 * key - a string storing Polish word
 * words - a vector of strings (each word may have multiple meanings)
 
-**Tree Operations**
+**Tree Operations**</br>
 The tree supports two main operations and several additional ones:
 * Find methods - Two variants for searching words in the dictionary:
   1. First returns a pointer to the node containing the data.
@@ -72,12 +99,58 @@ The tree supports two main operations and several additional ones:
 * Insert method - Adds new words to both the tree and the database(.txt files). If the word already exists, the method adds the new meaning to the vector (provided it is not already in the dictionary)
 * Overload `operator<<` - Works together with the `Dictionary` `operator[]`, allowing a word to be displayed using a simple statement: ` cout << dictionaty[string];`
 * Back, left and Other Methods - Enable returning from a node to the root while updating the tree structure with rotations if the weigth becomes unbalanced. 
+
+Also you can find in the same fille `AVL.h`header, a class that contains the tree:
+```c++
+ class Dictionary{
+    public:
+        Dictionary();
+        ~Dictionary();
+        DIC::node* operator[] (const std::string &val) {return root->FindNode(val);}
+        std::vector<std::string> operator[] (const char* val) {return root->Find(std::string(val));}
+        std::vector<std::string> ShowTree();
+        void AddWord(std::string sKey, std::string mean);
+    private:
+        node* root;
+    };
+```
 ### Ncurses library
 [Ncurses](https://en.wikipedia.org/wiki/Ncurses) is a UNIX-based library for creating textual user interfaces that work across various terminal environments. In this project i used two modules from the library: 
 * `menu.h` For composing character-cell terminal menus.
 * `form.h` For creating form-based screens that allow users to interact with the dictionary.
 
-**Menu class** 
+In a `Menu.h` header you can find whole menu class.
+```c++
+    class Menu{
+    public:
+        Menu() = default;
+        ~Menu();
+        void Init(const windowSpec &spec);
+        void Run();
+        void ShutDown();
+    private:
+        void FindMenu(int c);
+        void AddMenu(int c);
+        void TreeMenu(int c);
+        void LOWER(std::string &str);
+        bool corrLett(std::string str);
+        DIC::Dictionary dictionary;
+        //Main menu
+        ITEM **m_item;
+        MENU *m_menu;
+        //Find Method menu
+        FIELD **findField;
+        FORM *findForm;
+        //Add Method menu
+        FIELD **addField;
+        FORM *addForm;
+        //
+        WINDOW *m_window;
+        int iSizeChoices;
+        std::string *choices;
+    };
+```
+**Menu class** </br>
 The Menu includes the following components:
 * `Dictionary` - An object containing the AVL tree and the entire dictionary. This is the core class, that provides all functionalities, such as searching for words and adding new ones. 
 * `Choices` & `iSizeChoices` - An array of main menu options and its size.
